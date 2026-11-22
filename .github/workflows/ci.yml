@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    # CommonCrypto (used through ctypes) is only available on macOS.
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14", "3.15"]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          check-latest: true
+
+      - name: Check syntax
+        run: python -m compileall -q iauhty_export tests
+
+      - name: Check there are no third-party runtime dependencies
+        run: |
+          python - <<'EOF'
+          import ast, pathlib, sys
+          stdlib = sys.stdlib_module_names
+          bad = []
+          for path in pathlib.Path("iauhty_export").glob("*.py"):
+              for node in ast.walk(ast.parse(path.read_text())):
+                  names = []
+                  if isinstance(node, ast.Import):
+                      names = [a.name for a in node.names]
+                  elif isinstance(node, ast.ImportFrom) and node.level == 0:
+                      names = [node.module]
+                  bad += [f"{path}: {n}" for n in names if n.split(".")[0] not in stdlib and n != "__future__"]
+          if bad:
+              sys.exit("non-stdlib imports found:\n" + "\n".join(bad))
+          EOF
+
+      - name: Run unit and integration tests (synthetic data only)
+        run: python -m unittest discover -s tests -v
+
+      - name: CLI smoke test
+        run: |
+          python -m iauhty_export --help
+          python -m iauhty_export verify --file tests/fixtures/aegis_plain_synthetic.json

@@ -1,0 +1,52 @@
+# --- Sensitive output: never commit ---------------------------------------
+# Exported vaults and recovery reports contain TOTP secrets / account names.
+iauhty-export.json
+iauhty-export*.json
+*-report.txt
+IauhtyExport/
+*.aegis.json
+aegis-export*.json
+*.otpauth
+otpauth*.txt
+
+# iOS backups and keychain material
+MobileSync/
+Backup/
+Manifest.db
+Manifest.plist
+Manifest.mbdb
+Status.plist
+Info.plist
+keychain-backup.plist
+keychain*.json
+keys.json
+*.keychain
+*.keychain-db
+
+# Local scratch data used while testing against real backups
+local/
+private/
+real-data/
+
+# --- Python ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+.coverage
+htmlcov/
+
+# --- Misc -----------------------------------------------------------------
+*.log
+*.tmp
+.DS_Store
+.idea/
+.vscode/
+
+# Public synthetic fixtures are allowed
+!tests/fixtures/*.json

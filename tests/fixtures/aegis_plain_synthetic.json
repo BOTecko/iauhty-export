@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "header": {
+    "slots": null,
+    "params": null
+  },
+  "db": {
+    "version": 3,
+    "entries": [
+      {
+        "type": "totp",
+        "uuid": "8f1c2b7e-5d4a-4e3b-9c6f-2a1d0e9b8c7a",
+        "name": "fictitious@example.com",
+        "issuer": "Example",
+        "note": "",
+        "favorite": false,
+        "icon": null,
+        "info": {
+          "secret": "JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP",
+          "algo": "SHA1",
+          "digits": 6,
+          "period": 30
+        },
+        "groups": []
+      }
+    ],
+    "groups": [],
+    "icons_optimized": true
+  }
+}
